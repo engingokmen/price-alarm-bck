@@ -2,6 +2,9 @@
   "name": "price-alarm-bck",
   "version": "1.0.0",
   "main": "built/app.js",
+  "engines": {
+    "node": "22.x"
+  },
   "scripts": {
     "start": "tsc && node built/app.js",
     "build": "tsc",
