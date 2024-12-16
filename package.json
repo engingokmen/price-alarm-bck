@@ -1,8 +1,9 @@
 {
   "name": "price-alarm-bck",
   "version": "1.0.0",
-  "main": "built/index.js",
+  "main": "built/server.js",
   "scripts": {
+    "start": "node built/server.js",
     "build": "tsc",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
