@@ -1,0 +1,27 @@
+{
+  "name": "price-alarm-bck",
+  "version": "1.0.0",
+  "main": "built/index.js",
+  "scripts": {
+    "build": "tsc",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/engingokmen/price-alarm-bck.git"
+  },
+  "author": "Engin Gokmen",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/engingokmen/price-alarm-bck/issues"
+  },
+  "homepage": "https://github.com/engingokmen/price-alarm-bck#readme",
+  "description": "",
+  "devDependencies": {
+    "@types/express": "^5.0.0",
+    "typescript": "^5.7.2"
+  },
+  "dependencies": {
+    "express": "^4.21.2"
+  }
+}
