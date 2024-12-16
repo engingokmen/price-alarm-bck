@@ -1,0 +1,10 @@
+name: price-alarm-bck
+services:
+  - name: web
+    git:
+      repo: "https://github.com/engingokmen/price-alarm-bck.git"
+      branch: main
+    envs:
+      - key: USE_NPM_INSTALL
+        scope: BUILD_TIME
+        value: "true"
