@@ -1,6 +1,6 @@
 services:
   server:
-    image: engingokmen/alarm-backend
+    image: engingokmen/alarm-backend:1.0.0
     build:
       context: .
     environment:
