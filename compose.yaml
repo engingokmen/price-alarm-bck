@@ -1,0 +1,13 @@
+services:
+  server:
+    image: engingokmen/alarm-backend
+    build:
+      context: .
+    environment:
+      NODE_ENV: production
+      MONGO_URI: mongodb://database:27017/
+    ports:
+      - 9000:9000
+  database:
+    image: mongo
+    restart: always
