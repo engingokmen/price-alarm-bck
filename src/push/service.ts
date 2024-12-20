@@ -1,5 +1,6 @@
 import { Expo } from "expo-server-sdk";
 import { IMessage } from "../../types";
+import { errorMessages, ErrorResponse } from "../utils/error";
 
 // Create a new Expo SDK client
 // optionally providing an access token if you have enabled push security
@@ -24,16 +25,15 @@ export const sendNotification = async (
   pushToken: string,
   message: IMessage
 ) => {
-  // Check that the push token appears to be valid
-  if (!Expo.isExpoPushToken(pushToken)) {
-    console.error(`Push token ${pushToken} is not a valid Expo push token`);
-    return;
-  }
-
-  const tokenAddedMessage = { ...message, to: pushToken };
-
-  // Send the message
   try {
+    // Check that the push token appears to be valid
+    if (!Expo.isExpoPushToken(pushToken)) {
+      throw new ErrorResponse(errorMessages.INVALID_TOKEN);
+    }
+
+    const tokenAddedMessage = { ...message, to: pushToken };
+
+    // Send the message
     let ticket = await expo.sendPushNotificationsAsync([tokenAddedMessage]);
     return ticket;
   } catch (error) {

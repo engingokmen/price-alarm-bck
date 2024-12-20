@@ -1,14 +1,17 @@
-import { Request, Response } from "express";
+import { NextFunction, Request, Response } from "express";
 import { sendNotification } from "./service";
 import { getMessage } from "./messages";
 
-export const pushMessage = (req: Request, res: Response) => {
-  const token = req.body?.pushToken;
-
-  if (!token) {
-    res.status(400).json({ error: "Push token is required" });
+export const pushMessage = async (
+  req: Request,
+  res: Response,
+  next: NextFunction
+) => {
+  try {
+    const { pushToken } = req.body;
+    const ticket = await sendNotification(pushToken, getMessage("testMessage"));
+    res.json({ message: "Push message sent", ticket });
+  } catch (error) {
+    next(error);
   }
-  const ticket = sendNotification(token, getMessage("testMessage"));
-
-  res.json({ token, ticket });
 };

@@ -1,7 +1,6 @@
-import mongoose from "mongoose";
+import { Schema } from "mongoose";
+import { IAlarm } from "../../types";
 
-const alarmSchema = new mongoose.Schema({
-  price: Number,
+export const alarmSchema = new Schema<IAlarm>({
+  price: { type: Number, unique: true },
 });
-
-export const AlarmModel = mongoose.model("Alarm", alarmSchema);

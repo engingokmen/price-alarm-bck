@@ -1,3 +1,5 @@
+import mongoose, { Document } from "mongoose";
+
 export interface IMessage {
   to: string;
   sound: string;
@@ -5,6 +7,16 @@ export interface IMessage {
   body: string;
 }
 
-export interface IAlarm {
+export interface IUser extends Document {
+  _id: string;
+  pushToken: string;
+  email?: string;
+  firstname?: string;
+  lastname?: string;
+  alarms: mongoose.Types.DocumentArray<IAlarm>;
+}
+
+export interface IAlarm extends Document {
+  _id: string;
   price: number;
 }
