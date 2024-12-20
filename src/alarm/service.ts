@@ -1,3 +1,4 @@
+import { MAX_ALLOWED_ALARMS_PER_USER } from "../../settings";
 import { IAlarm } from "../../types";
 import { getUserByPushToken } from "../user/service";
 import { errorMessages, ErrorResponse } from "../utils/error";
@@ -15,6 +16,11 @@ export const getAlarms = async (pushToken: string) => {
 export const addAlarm = async (pushToken: string, alarm: IAlarm) => {
   try {
     const user = await getUserByPushToken(pushToken);
+
+    const numberOfAlarms = user.alarms.length;
+    if (numberOfAlarms >= MAX_ALLOWED_ALARMS_PER_USER) {
+      throw new ErrorResponse(errorMessages.ALARM_LIMIT_EXCEEDED);
+    }
 
     const alarmAdded = user.alarms.create(alarm);
 

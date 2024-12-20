@@ -1,5 +1,6 @@
 import { NextFunction, Request, Response } from "express";
 import { Error } from "mongoose";
+import { MAX_ALLOWED_ALARMS_PER_USER } from "../../settings";
 
 export class ErrorResponse extends Error {
   statusCode: number;
@@ -86,6 +87,10 @@ export const errorMessages = {
   USERS_NOT_FOUND: {
     message: "The requested users could not be found!",
     statusCode: 404,
+  },
+  ALARM_LIMIT_EXCEEDED: {
+    message: `The alarm limit is exceeded! You can only add ${MAX_ALLOWED_ALARMS_PER_USER} alarms.`,
+    statusCode: 400,
   },
 };
 

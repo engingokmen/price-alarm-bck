@@ -1,0 +1,1 @@
+export const MAX_ALLOWED_ALARMS_PER_USER = 20;
