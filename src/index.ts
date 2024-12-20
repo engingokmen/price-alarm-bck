@@ -1,9 +1,10 @@
 import express, { NextFunction, Request, Response } from "express";
 import { price } from "./listen-price/service";
 import { pushMessage } from "./push/controller";
-import { all, add, removeAll, remove } from "./alarm/controller";
+import { all, add, removeAll, remove, update } from "./alarm/controller";
 import { startDB } from "./startDB";
 import Expo from "expo-server-sdk";
+import { getAllJobs, toggleJob } from "./jobs/controller";
 
 startDB().catch((err) => console.log(err));
 const app = express();
@@ -18,8 +19,11 @@ app.use(express.json());
 app.post("/push", pushMessage, validatePushToken);
 app.get("/alarm", all, validatePushToken);
 app.post("/alarm", add, validatePushToken);
+app.patch("/alarm", update, validatePushToken);
 app.delete("/alarm", remove, validatePushToken);
 app.delete("/alarm/remove-all", removeAll, validatePushToken);
+app.get("/job", getAllJobs);
+app.patch("/job", toggleJob);
 
 app.listen(port, () => {
   console.log(`Example app listening on port ${port}`);

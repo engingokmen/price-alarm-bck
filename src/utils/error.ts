@@ -83,6 +83,10 @@ export const errorMessages = {
     message: "The requested alarm could not be found!",
     statusCode: 404,
   },
+  USERS_NOT_FOUND: {
+    message: "The requested users could not be found!",
+    statusCode: 404,
+  },
 };
 
 export function errorHandler(

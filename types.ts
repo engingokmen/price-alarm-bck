@@ -19,4 +19,10 @@ export interface IUser extends Document {
 export interface IAlarm extends Document {
   _id: string;
   price: number;
+  type: "above" | "below";
+  isDone: boolean;
+}
+
+export interface IJob {
+  runPriceCheck: boolean;
 }

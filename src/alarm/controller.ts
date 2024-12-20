@@ -1,5 +1,11 @@
 import { NextFunction, Request, Response } from "express";
-import { getAlarms, addAlarm, removeAlarm, removeAlarmAll } from "./service";
+import {
+  getAlarms,
+  addAlarm,
+  removeAlarm,
+  removeAlarmAll,
+  updateAlarm,
+} from "./service";
 
 export const all = async (req: Request, res: Response, next: NextFunction) => {
   try {
@@ -16,6 +22,20 @@ export const add = async (req: Request, res: Response, next: NextFunction) => {
     const { pushToken, alarm } = req.body;
     const alarmAdded = await addAlarm(pushToken, alarm);
     res.json(alarmAdded);
+  } catch (error) {
+    next(error);
+  }
+};
+
+export const update = async (
+  req: Request,
+  res: Response,
+  next: NextFunction
+) => {
+  try {
+    const { pushToken, alarm } = req.body;
+    const alarmUpdated = await updateAlarm(pushToken, alarm);
+    res.json(alarmUpdated);
   } catch (error) {
     next(error);
   }

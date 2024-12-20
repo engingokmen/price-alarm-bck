@@ -31,6 +31,26 @@ export const addAlarm = async (pushToken: string, alarm: IAlarm) => {
   }
 };
 
+export const updateAlarm = async (pushToken: string, alarm: IAlarm) => {
+  try {
+    const user = await getUserByPushToken(pushToken);
+
+    const alarmFound = user.alarms.id(alarm);
+
+    if (!alarmFound) {
+      throw new ErrorResponse(errorMessages.ALARM_NOT_FOUND);
+    }
+
+    alarmFound.set(alarm);
+
+    user.save();
+
+    return alarmFound;
+  } catch (error) {
+    throw error;
+  }
+};
+
 export const removeAlarm = async (pushToken: string, alarm: IAlarm) => {
   try {
     const user = await getUserByPushToken(pushToken);

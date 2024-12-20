@@ -40,3 +40,8 @@ export const sendNotification = async (
     console.error(error);
   }
 };
+
+export const sendMultipleNotifications = async (messages: IMessage[]) => {
+  const tickets = expo.sendPushNotificationsAsync(messages);
+  return tickets;
+};
