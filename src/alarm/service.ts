@@ -1,11 +1,15 @@
 import { MAX_ALLOWED_ALARMS_PER_USER } from "../settings";
 import { IAlarm } from "../../types";
-import { getUserByPushToken } from "../user/service";
+import { createUser, getUserByPushToken } from "../user/service";
 import { errorMessages, ErrorResponse } from "../utils/error";
 
 export const getAlarms = async (pushToken: string) => {
   try {
     const user = await getUserByPushToken(pushToken);
+
+    if (!user) {
+      throw new ErrorResponse(errorMessages.USER_NOT_FOUND);
+    }
 
     return user.alarms;
   } catch (error) {
@@ -15,7 +19,11 @@ export const getAlarms = async (pushToken: string) => {
 
 export const addAlarm = async (pushToken: string, alarm: IAlarm) => {
   try {
-    const user = await getUserByPushToken(pushToken);
+    let user = await getUserByPushToken(pushToken);
+
+    if (!user) {
+      user = await createUser(pushToken);
+    }
 
     const numberOfAlarms = user.alarms.length;
     if (numberOfAlarms >= MAX_ALLOWED_ALARMS_PER_USER) {
@@ -33,6 +41,7 @@ export const addAlarm = async (pushToken: string, alarm: IAlarm) => {
 
     return alarmAdded;
   } catch (error) {
+    console.log("***error", error);
     throw error;
   }
 };
@@ -40,6 +49,10 @@ export const addAlarm = async (pushToken: string, alarm: IAlarm) => {
 export const updateAlarm = async (pushToken: string, alarm: IAlarm) => {
   try {
     const user = await getUserByPushToken(pushToken);
+
+    if (!user) {
+      throw new ErrorResponse(errorMessages.USER_NOT_FOUND);
+    }
 
     const alarmFound = user.alarms.id(alarm);
 
@@ -61,6 +74,10 @@ export const removeAlarm = async (pushToken: string, alarm: IAlarm) => {
   try {
     const user = await getUserByPushToken(pushToken);
 
+    if (!user) {
+      throw new ErrorResponse(errorMessages.USER_NOT_FOUND);
+    }
+
     const alarmFound = user.alarms.id(alarm);
 
     if (!alarmFound) {
@@ -80,6 +97,10 @@ export const removeAlarm = async (pushToken: string, alarm: IAlarm) => {
 export const removeAlarmAll = async (pushToken: string) => {
   try {
     const user = await getUserByPushToken(pushToken);
+
+    if (!user) {
+      throw new ErrorResponse(errorMessages.USER_NOT_FOUND);
+    }
 
     user.alarms.splice(0, user.alarms.length);
 

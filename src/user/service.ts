@@ -29,10 +29,6 @@ export const getUserByPushToken = async (pushToken: string) => {
   try {
     const user = await UserModel.findOne({ pushToken });
 
-    if (!user) {
-      throw new ErrorResponse(errorMessages.USER_NOT_FOUND);
-    }
-
     return user;
   } catch (error) {
     throw error;
