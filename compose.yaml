@@ -2,7 +2,6 @@ services:
   reverse-proxy:
     # The official v3 Traefik docker image
     image: traefik:v3.2
-    container_name: traefik
     # Enables the web UI and tells Traefik to listen to docker
     ports:
       # The HTTP port
@@ -24,8 +23,8 @@ services:
     environment:
       NODE_ENV: production
       MONGO_URI: mongodb://database:27017/
-    ports:
-      - 80:9000
+    labels:
+      - "traefik.http.routers.server.rule=Host(`price-alarm.engingokmen.com`)"
   database:
     image: mongo
     restart: always
