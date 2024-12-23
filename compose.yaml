@@ -12,10 +12,9 @@ services:
       - ./traefik.yml:/etc/traefik/traefik.yml:ro
       - ./letsencrypt:/letsencrypt
     labels:
-      - "traefik.enable=true"
-      - "traefik.http.routers.app.rule=Host(`price-alarm.engingokmen.com`)"
-      - "traefik.http.routers.app.entrypoints=websecure"
-      - "traefik.http.routers.app.tls.certresolver=letsencrypt"
+      - traefik.http.routers.server.rule=Host(`price-alarm.engingokmen.com`)
+      - traefik.http.routers.server.tls=true
+      - traefik.http.routers.server.tls.certresolver=letsencrypt
   server:
     image: engingokmen/alarm-backend:1.0.0
     build:
@@ -23,8 +22,6 @@ services:
     environment:
       NODE_ENV: production
       MONGO_URI: mongodb://database:27017/
-    labels:
-      - "traefik.http.routers.server.rule=Host(`price-alarm.engingokmen.com`)"
   database:
     image: mongo
     restart: always
