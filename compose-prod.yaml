@@ -21,8 +21,9 @@ services:
       NODE_ENV: production
       MONGO_URI: mongodb://database:27017/
     labels:
-      - "traefik.http.routers.server.rule=Host(`price-alarm.engingokmen.com`)"
-      - "traefik.http.routers.server.entrypoints=websecure"
+      - traefik.http.routers.server.rule=Host(`price-alarm.engingokmen.com`)
+      - traefik.http.routers.server.entrypoints=websecure
+      - traefik.http.routers.server.tls.certresolver=myresolver
   database:
     image: mongo
     restart: always
