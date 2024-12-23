@@ -1,6 +1,6 @@
 import { NextFunction, Request, Response } from "express";
 import { Error } from "mongoose";
-import { MAX_ALLOWED_ALARMS_PER_USER } from "../../settings";
+import { MAX_ALLOWED_ALARMS_PER_USER } from "../settings";
 
 export class ErrorResponse extends Error {
   statusCode: number;

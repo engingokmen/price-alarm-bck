@@ -7,14 +7,16 @@ services:
       # The HTTP port
       - "80:80"
       - "443:443"
+    command:
+      - --api.insecure=true
+      - --providers.docker=true
+      - --providers.docker.exposedbydefault=false
+      - --entryPoints.websecure.address=:443
+      - --certificatesresolvers.myresolver.acme.tlschallenge=true
     volumes:
       - /var/run/docker.sock:/var/run/docker.sock:ro
       - ./traefik.yml:/etc/traefik/traefik.yml:ro
       - ./letsencrypt:/letsencrypt
-    labels:
-      - traefik.http.routers.server.rule=Host(`price-alarm.engingokmen.com`)
-      - traefik.http.routers.server.tls=true
-      - traefik.http.routers.server.tls.certresolver=letsencrypt
   server:
     image: engingokmen/alarm-backend:1.0.0
     build:
@@ -22,6 +24,11 @@ services:
     environment:
       NODE_ENV: production
       MONGO_URI: mongodb://database:27017/
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.routers.server.rule=Host(`price-alarm.engingokmen.com`)"
+      - "traefik.http.routers.server.entrypoints=websecure"
+      - "traefik.http.routers.server.tls.certresolver=myresolver"
   database:
     image: mongo
     restart: always

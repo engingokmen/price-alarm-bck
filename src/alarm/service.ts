@@ -1,4 +1,4 @@
-import { MAX_ALLOWED_ALARMS_PER_USER } from "../../settings";
+import { MAX_ALLOWED_ALARMS_PER_USER } from "../settings";
 import { IAlarm } from "../../types";
 import { getUserByPushToken } from "../user/service";
 import { errorMessages, ErrorResponse } from "../utils/error";
