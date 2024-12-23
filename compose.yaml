@@ -1,4 +1,22 @@
 services:
+  reverse-proxy:
+    # The official v3 Traefik docker image
+    image: traefik:v3.2
+    container_name: traefik
+    # Enables the web UI and tells Traefik to listen to docker
+    ports:
+      # The HTTP port
+      - "80:80"
+      - "443:443"
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock:ro
+      - ./traefik.yml:/etc/traefik/traefik.yml:ro
+      - ./letsencrypt:/letsencrypt
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.routers.app.rule=Host(`price-alarm.engingokmen.com`)"
+      - "traefik.http.routers.app.entrypoints=websecure"
+      - "traefik.http.routers.app.tls.certresolver=letsencrypt"
   server:
     image: engingokmen/alarm-backend:1.0.0
     build:
