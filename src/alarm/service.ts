@@ -26,7 +26,7 @@ export const addAlarm = async (pushToken: string, alarm: IAlarm) => {
     }
 
     const numberOfAlarms = user.alarms.length;
-    if (numberOfAlarms >= MAX_ALLOWED_ALARMS_PER_USER) {
+    if (numberOfAlarms > MAX_ALLOWED_ALARMS_PER_USER) {
       throw new ErrorResponse(errorMessages.ALARM_LIMIT_EXCEEDED);
     }
 
@@ -39,9 +39,8 @@ export const addAlarm = async (pushToken: string, alarm: IAlarm) => {
     user.alarms.push(alarm);
     user.save();
 
-    return alarmAdded;
+    return user.alarms;
   } catch (error) {
-    console.log("***error", error);
     throw error;
   }
 };
@@ -64,13 +63,13 @@ export const updateAlarm = async (pushToken: string, alarm: IAlarm) => {
 
     user.save();
 
-    return alarmFound;
+    return user.alarms;
   } catch (error) {
     throw error;
   }
 };
 
-export const removeAlarm = async (pushToken: string, alarm: IAlarm) => {
+export const removeAlarm = async (pushToken: string, id: string) => {
   try {
     const user = await getUserByPushToken(pushToken);
 
@@ -78,17 +77,17 @@ export const removeAlarm = async (pushToken: string, alarm: IAlarm) => {
       throw new ErrorResponse(errorMessages.USER_NOT_FOUND);
     }
 
-    const alarmFound = user.alarms.id(alarm);
+    const alarmFound = user.alarms.id(id);
 
     if (!alarmFound) {
       throw new ErrorResponse(errorMessages.ALARM_NOT_FOUND);
     }
 
-    const alarmRemoved = await alarmFound?.deleteOne();
+    await alarmFound?.deleteOne();
 
     user.save();
 
-    return alarmRemoved;
+    return user.alarms;
   } catch (error) {
     throw error;
   }

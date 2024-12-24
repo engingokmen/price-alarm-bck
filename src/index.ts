@@ -6,6 +6,7 @@ import { all, add, removeAll, remove, update } from "./alarm/controller";
 import { startDB } from "./startDB";
 import Expo from "expo-server-sdk";
 import { getAllJobs, toggleJob } from "./jobs/controller";
+import { errorHandler, errorMessages, ErrorResponse } from "./utils/error";
 
 startDB().catch((err) => console.log(err));
 const app = express();
@@ -14,33 +15,37 @@ const port = process.env.PORT || 3000;
 app.use(cors());
 
 app.get("/", (req: Request, res: Response) => {
-  res.send(`price: ${price}`);
+  res.json({ price });
 });
 
 app.use(express.json());
 
-app.post("/push", pushMessage, validatePushToken);
-app.get("/alarm", all, validatePushToken);
-app.post("/alarm", add, validatePushToken);
-app.patch("/alarm", update, validatePushToken);
-app.delete("/alarm", remove, validatePushToken);
-app.delete("/alarm/remove-all", removeAll, validatePushToken);
+app.post("/push", validatePushToken, pushMessage);
+app.get("/alarm", validatePushToken, all);
+app.post("/alarm", validatePushToken, add);
+app.patch("/alarm", validatePushToken, update);
+app.delete("/alarm", validatePushToken, remove);
+app.delete("/alarm/remove-all", validatePushToken, removeAll);
 app.get("/job", getAllJobs);
 app.patch("/job", toggleJob);
+
+app.use(errorHandler);
 
 app.listen(port, () => {
   console.log(`Example app listening on port ${port}`);
 });
 
 function validatePushToken(req: Request, res: Response, next: NextFunction) {
-  const pushToken = req.body?.pushToken;
-  if (!pushToken) {
-    res.status(400).json({ error: "pushToken is required" });
-  }
-  if (!Expo.isExpoPushToken(pushToken)) {
-    res.status(400).json({
-      error: `Push token ${pushToken} is not a valid Expo push token`,
-    });
+  const pushTokenQuery = req.query?.pushToken;
+  const pushTokenBody = req.body?.pushToken;
+
+  if (
+    (!pushTokenQuery && !pushTokenBody) ||
+    (typeof pushTokenQuery !== "string" && typeof pushTokenBody !== "string") ||
+    (!Expo.isExpoPushToken(pushTokenQuery) &&
+      !Expo.isExpoPushToken(pushTokenBody))
+  ) {
+    throw new ErrorResponse(errorMessages.INVALID_TOKEN);
   }
   next();
 }

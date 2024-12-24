@@ -9,8 +9,8 @@ import {
 
 export const all = async (req: Request, res: Response, next: NextFunction) => {
   try {
-    const { pushToken } = req.body;
-    const alarms = await getAlarms(pushToken);
+    const { pushToken } = req.query;
+    const alarms = await getAlarms(String(pushToken));
     res.json(alarms);
   } catch (error) {
     next(error);
@@ -20,8 +20,8 @@ export const all = async (req: Request, res: Response, next: NextFunction) => {
 export const add = async (req: Request, res: Response, next: NextFunction) => {
   try {
     const { pushToken, alarm } = req.body;
-    const alarmAdded = await addAlarm(pushToken, alarm);
-    res.json(alarmAdded);
+    const alarms = await addAlarm(pushToken, alarm);
+    res.json(alarms);
   } catch (error) {
     next(error);
   }
@@ -34,8 +34,8 @@ export const update = async (
 ) => {
   try {
     const { pushToken, alarm } = req.body;
-    const alarmUpdated = await updateAlarm(pushToken, alarm);
-    res.json(alarmUpdated);
+    const alarms = await updateAlarm(pushToken, alarm);
+    res.json(alarms);
   } catch (error) {
     next(error);
   }
@@ -47,9 +47,9 @@ export const remove = async (
   next: NextFunction
 ) => {
   try {
-    const { pushToken, alarm } = req.body;
-    const alarmRemoved = await removeAlarm(pushToken, alarm);
-    res.json(alarmRemoved);
+    const { pushToken, id } = req.body;
+    const alarms = await removeAlarm(pushToken, id);
+    res.json(alarms);
   } catch (error) {
     next(error);
   }

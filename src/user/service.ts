@@ -18,7 +18,6 @@ export const getAllUsers = async () => {
 export const createUser = async (pushToken: string) => {
   try {
     const newUser = new UserModel({ pushToken });
-    newUser.save();
     return newUser;
   } catch (error) {
     throw error;
