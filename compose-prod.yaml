@@ -14,7 +14,7 @@ services:
       - /var/run/docker.sock:/var/run/docker.sock
       - ./letsencrypt:/letsencrypt
   server:
-    image: engingokmen/alarm-backend:1.0.0
+    image: engingokmen/alarm-backend:1.0.1
     build:
       context: .
     environment:
