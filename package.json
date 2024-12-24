@@ -22,10 +22,12 @@
   "homepage": "https://github.com/engingokmen/price-alarm-bck#readme",
   "description": "",
   "devDependencies": {
+    "@types/cors": "^2.8.17",
     "@types/express": "^5.0.0",
     "typescript": "^5.7.2"
   },
   "dependencies": {
+    "cors": "^2.8.5",
     "expo-server-sdk": "^3.13.0",
     "express": "^4.21.2",
     "mongoose": "^8.9.1"

@@ -1,3 +1,4 @@
+import cors from "cors";
 import express, { NextFunction, Request, Response } from "express";
 import { price } from "./listen-price/service";
 import { pushMessage } from "./push/controller";
@@ -9,6 +10,8 @@ import { getAllJobs, toggleJob } from "./jobs/controller";
 startDB().catch((err) => console.log(err));
 const app = express();
 const port = process.env.PORT || 3000;
+
+app.use(cors());
 
 app.get("/", (req: Request, res: Response) => {
   res.send(`price: ${price}`);
